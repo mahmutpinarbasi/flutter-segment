@@ -364,8 +364,6 @@ static BOOL wasSetupFromFile = NO;
 + (SEGAnalyticsConfiguration*)createConfigFromDict:(NSDictionary*) dict {
     NSString *writeKey = [dict objectForKey: @"writeKey"];
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
-    BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"amplitudeIntegrationEnabled"] boolValue];
-    BOOL isAppsflyerIntegrationEnabled = [[dict objectForKey: @"appsflyerIntegrationEnabled"] boolValue];
     NSString * apiHost = [dict objectForKey: @"apiHost"] ;
     NSURL * apiHostURL = [NSURL URLWithString:apiHost];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey defaultAPIHost:apiHostURL];
