@@ -1,9 +1,8 @@
-#import "SEGAppsFlyerIntegrationFactory.h"
+
 #import "FlutterSegmentPlugin.h"
 #import <Segment/SEGAnalytics.h>
 #import <Segment/SEGContext.h>
 #import <Segment/SEGMiddleware.h>
-#import <Segment_Amplitude/SEGAmplitudeIntegrationFactory.h>
 
 @implementation FlutterSegmentPlugin
 // Contents to be appended to the context
@@ -359,10 +358,6 @@ static BOOL wasSetupFromFile = NO;
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
 
-    if (isAmplitudeIntegrationEnabled) {
-      [configuration use:[SEGAmplitudeIntegrationFactory instance]];
-    }
-
     return configuration;
 }
 
@@ -371,17 +366,10 @@ static BOOL wasSetupFromFile = NO;
     BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
     BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"amplitudeIntegrationEnabled"] boolValue];
     BOOL isAppsflyerIntegrationEnabled = [[dict objectForKey: @"appsflyerIntegrationEnabled"] boolValue];
-    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
+    NSString * apiHost = [dict objectForKey: @"apiHost"] ;
+    NSURL * apiHostURL = [NSURL URLWithString:apiHost];
+    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey defaultAPIHost:apiHostURL];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
-
-    if (isAmplitudeIntegrationEnabled) {
-      [configuration use:[SEGAmplitudeIntegrationFactory instance]];
-    }
-
-    if (isAppsflyerIntegrationEnabled) {
-      [configuration use:[SEGAppsFlyerIntegrationFactory instance]];
-    }
-
     return configuration;
 }
 
