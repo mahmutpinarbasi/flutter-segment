@@ -41,12 +41,10 @@ public class FlutterSegmentOptions {
         String writeKey = bundle.getString("com.claimsforce.segment.WRITE_KEY");
         Boolean trackApplicationLifecycleEvents = bundle
                 .getBoolean("com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS");
-        Boolean isAmplitudeIntegrationEnabled = bundle
-                .getBoolean("com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION", false);
-        Boolean isAppsflyerIntegrationEnabled = bundle
-                .getBoolean("com.claimsforce.segment.ENABLE_APPSFLYER_INTEGRATION", false);
+        String apiHost = bundle
+                .getString("com.claimsforce.segment.API_HOST");
         Boolean debug = bundle.getBoolean("com.claimsforce.segment.DEBUG", false);
-        return new FlutterSegmentOptions(writeKey, "N/A", trackApplicationLifecycleEvents, debug);
+        return new FlutterSegmentOptions(writeKey, apiHost, trackApplicationLifecycleEvents, debug);
     }
 
     static FlutterSegmentOptions create(HashMap<String, Object> options) {

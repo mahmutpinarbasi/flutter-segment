@@ -350,23 +350,29 @@ static BOOL wasSetupFromFile = NO;
     NSString *path = [[NSBundle mainBundle] pathForResource: @"Info" ofType: @"plist"];
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: path];
     NSString *writeKey = [dict objectForKey: @"com.claimsforce.segment.WRITE_KEY"];
-    BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
-    BOOL isAmplitudeIntegrationEnabled = [[dict objectForKey: @"com.claimsforce.segment.ENABLE_AMPLITUDE_INTEGRATION"] boolValue];
-    if(!writeKey) {
+    NSString * apiHost = [dict objectForKey: @"com.claimsforce.segment.API_HOST"] ;
+    if(!writeKey || !apiHost) {
+        NSLog(@"Segment.createConfigFromFile failed. writeKey and apiHost cannot be empty");
         return nil;
     }
-    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey];
+    NSURL * apiHostURL = [NSURL URLWithString:apiHost];
+    SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey defaultAPIHost:apiHostURL];
+    BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"com.claimsforce.segment.TRACK_APPLICATION_LIFECYCLE_EVENTS"] boolValue];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
-
     return configuration;
 }
 
 + (SEGAnalyticsConfiguration*)createConfigFromDict:(NSDictionary*) dict {
     NSString *writeKey = [dict objectForKey: @"writeKey"];
-    BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
     NSString * apiHost = [dict objectForKey: @"apiHost"] ;
+    if(!writeKey || !apiHost) {
+        NSLog(@"Segment.createConfigFromDict failed. writeKey and apiHost cannot be empty");
+        return nil;
+    }
+    
     NSURL * apiHostURL = [NSURL URLWithString:apiHost];
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:writeKey defaultAPIHost:apiHostURL];
+    BOOL trackApplicationLifecycleEvents = [[dict objectForKey: @"trackApplicationLifecycleEvents"] boolValue];
     configuration.trackApplicationLifecycleEvents = trackApplicationLifecycleEvents;
     return configuration;
 }
